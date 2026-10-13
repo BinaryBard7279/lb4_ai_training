@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Регрессия | Лабораторная 4{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Прогнозирование массы тела пингвина</h2>
+    <div class="subtitle">Нейросеть 3 → 8 → 1 (1 выходной нейрон с линейной активацией)</div>
+
+    <div class="presets">
+        <span>Примеры данных:</span>
+        <button type="button" onclick="setPreset(39.1, 18.7, 181.0)">Пример 1 (~3460 г)</button>
+        <button type="button" onclick="setPreset(51.3, 19.9, 198.0)">Пример 2 (~3920 г)</button>
+        <button type="button" onclick="setPreset(49.6, 15.0, 216.0)">Пример 3 (~4990 г)</button>
+    </div>
+
+    <form method="post" action="/regression">
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="bill_length_mm">Длина клюва (мм):</label>
+                <input type="number" step="0.1" id="bill_length_mm" name="bill_length_mm"
+                       value="{{ form_data.bill_length_mm if form_data else '39.1' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="bill_depth_mm">Глубина клюва (мм):</label>
+                <input type="number" step="0.1" id="bill_depth_mm" name="bill_depth_mm"
+                       value="{{ form_data.bill_depth_mm if form_data else '18.7' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="flipper_length_mm">Длина ласт (мм):</label>
+                <input type="number" step="0.1" id="flipper_length_mm" name="flipper_length_mm"
+                       value="{{ form_data.flipper_length_mm if form_data else '181.0' }}" required>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-submit">Рассчитать массу</button>
+    </form>
+
+    {% if result %}
+    <div class="result-box">
+        Предсказанная масса: {{ result }}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function setPreset(len, depth, flipper) {
+        document.getElementById('bill_length_mm').value = len;
+        document.getElementById('bill_depth_mm').value = depth;
+        document.getElementById('flipper_length_mm').value = flipper;
+    }
+</script>
+{% endblock %}

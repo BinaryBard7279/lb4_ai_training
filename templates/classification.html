@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Классификация | Лабораторная 4{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>Классификация вида пингвина</h2>
+    <div class="subtitle">Нейросеть 4 → 8 → 3 (сигмоида в скрытом и выходном слоях)</div>
+
+    <div class="presets">
+        <span>Примеры данных:</span>
+        <button type="button" onclick="setPreset(38.8, 17.6, 191.0, 3275)">Пример 1 (Adelie)</button>
+        <button type="button" onclick="setPreset(50.0, 19.5, 196.0, 3900)">Пример 2 (Chinstrap)</button>
+        <button type="button" onclick="setPreset(49.9, 16.1, 213.0, 5400)">Пример 3 (Gentoo)</button>
+    </div>
+
+    <form method="post" action="/classification">
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="bill_length_mm">Длина клюва (мм):</label>
+                <input type="number" step="0.1" id="bill_length_mm" name="bill_length_mm"
+                       value="{{ form_data.bill_length_mm if form_data else '38.8' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="bill_depth_mm">Глубина клюва (мм):</label>
+                <input type="number" step="0.1" id="bill_depth_mm" name="bill_depth_mm"
+                       value="{{ form_data.bill_depth_mm if form_data else '17.6' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="flipper_length_mm">Длина ласт (мм):</label>
+                <input type="number" step="0.1" id="flipper_length_mm" name="flipper_length_mm"
+                       value="{{ form_data.flipper_length_mm if form_data else '191.0' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="body_mass_g">Масса тела (г):</label>
+                <input type="number" step="1" id="body_mass_g" name="body_mass_g"
+                       value="{{ form_data.body_mass_g if form_data else '3275' }}" required>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-submit">Определить вид</button>
+    </form>
+
+    {% if result %}
+    <div class="result-box">
+        Предсказанный вид: {{ result }}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function setPreset(len, depth, flipper, mass) {
+        document.getElementById('bill_length_mm').value = len;
+        document.getElementById('bill_depth_mm').value = depth;
+        document.getElementById('flipper_length_mm').value = flipper;
+        document.getElementById('body_mass_g').value = mass;
+    }
+</script>
+{% endblock %}
